@@ -1,0 +1,44 @@
+# Neovim Configuration .gitignore
+
+# Plugin manager files
+lazy-lock.json
+
+# Backup and temporary files
+*.bak
+*.backup
+*.tmp
+*.swp
+*.swo
+*~
+
+# Plugin directories (managed by package manager)
+plugin/
+.repro/
+
+# LSP and diagnostic files
+.null-ls_*
+.eslintcache
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Personal/local files
+local.lua
+private.lua
+
+# Debug and log files
+debug.log
+*.log
+
+# Compiled files
+*.pyc
+*.pyo
+
+# IDE files
+.vscode/
+.idea/
+
+# Test artifacts
+test_results/
+coverage/
