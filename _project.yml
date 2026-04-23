@@ -1,0 +1,12 @@
+slug: config-nvim
+kind: other
+primary_language: lua
+frameworks: [lazy.nvim]
+runtimes: [neovim0.9.5]
+external_services: [github]
+entry_points:
+  dev: "nvim"
+  test: "./test-config.sh"
+deploy:
+  target: none
+  docs: "README.md (Installation section)"
