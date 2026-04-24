@@ -1,3 +1,8 @@
+> **Historical note:** this file is an archived improvement log from an
+> earlier iteration of the repository. It is preserved for context only and
+> may not reflect the current layout. See `README.md` for the current entry
+> point and `E1155-FIX.md` for active troubleshooting.
+
 # Neovim Configuration Improvement Summary
 
 ## ⚠️ Important: E1155 Error Fix
