@@ -29,9 +29,12 @@ version and resource budget.
 - `test-config.sh`, `test-final.sh`, `verify-repo.sh` — Bash scripts that
   smoke-test the config and verify repository contents.
 - `specs/` — task specifications consumed by automation.
-- `README.md`, `QUICK-REFERENCE.md`, `TESTING.md`, `IMPROVEMENTS.md`,
-  `FINAL-STATUS.md`, `FINAL-SUCCESS.md`, `MISSION-COMPLETE.md`,
-  `REPO-SUMMARY.md`, `REPOSITORY-STATUS.md`, `E1155-FIX.md` — documentation.
+- `README.md` — primary human entry point.
+- `QUICK-REFERENCE.md`, `TESTING.md`, `E1155-FIX.md` — supporting
+  documentation kept at the repo root.
+- `docs/archive/` — historical completion/status notes (`FINAL-STATUS.md`,
+  `FINAL-SUCCESS.md`, `MISSION-COMPLETE.md`, `REPO-SUMMARY.md`,
+  `REPOSITORY-STATUS.md`, `IMPROVEMENTS.md`) preserved for context only.
 
 ## How to run locally
 

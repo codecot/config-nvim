@@ -1,4 +1,9 @@
-# 🎉 Repository Successfully Created
+> **Historical note:** this file is an archived completion report from an
+> earlier iteration of the repository. It is preserved for context only and
+> may not reflect the current layout. See `README.md` for the current entry
+> point.
+
+# Repository Successfully Created
 
 ## Repository Information
 

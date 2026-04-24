@@ -1,4 +1,9 @@
-# ✅ Neovim Configuration Complete - Final Status
+> **Historical note:** this file is an archived completion report from an
+> earlier iteration of the repository. It is preserved for context only and
+> may not reflect the current layout. See `README.md` for the current entry
+> point.
+
+# Neovim Configuration Complete - Final Status
 
 ## E1155 Error - RESOLVED ✅
 
