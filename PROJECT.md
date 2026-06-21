@@ -3,35 +3,33 @@
 ## What this project does
 
 A Neovim editor configuration written in Lua, intended to be cloned into
-`~/.config/nvim`. It ships several `init-*.lua` variants (safe, minimal,
-enhanced, complex) so the user can pick a profile that matches their Neovim
-version and resource budget.
+`~/.config/nvim`. It ships two profiles — the Default (`init.lua`) and the
+LSP-enabled Complex (`init-complex.lua`) — so the user can pick the one that
+matches their Neovim version and resource budget.
 
 ## Main technologies
 
-- Neovim 0.9.5+ (target runtime)
+- Neovim 0.9+ (target runtime; Complex profile needs 0.10+)
 - Lua (configuration language)
 - [lazy.nvim](https://github.com/folke/lazy.nvim) for plugin management
 - Bash for the local verification/test scripts
 
 ## Project structure
 
-- `init.lua` — main entry point loaded by Neovim; wraps the safe variant.
-- `init-safe.lua`, `init-minimal.lua`, `init-enhanced.lua`, `init-complex.lua`,
-  `init-enhanced-backup.lua` — alternate profiles selectable by copying over
-  `init.lua`.
+- `init.lua` — main entry point loaded by Neovim; the Default profile.
+- `init-complex.lua` — alternate LSP-enabled profile, selectable by copying it
+  over `init.lua`.
 - `lua/` — modular configuration: `options.lua`, `keymaps.lua`,
   `autocmds.lua`, `plugins.lua`, `enhanced-plugins.lua`,
   `minimal-plugins.lua`, `no-compiler-plugins.lua`, `lsp.lua`,
   `cmp-config.lua`.
 - `lazy-lock.json` — pinned plugin versions managed by lazy.nvim.
-- `vim.lua` — auxiliary Vim-side settings.
 - `test-config.sh`, `test-final.sh`, `verify-repo.sh` — Bash scripts that
   smoke-test the config and verify repository contents.
 - `specs/` — task specifications consumed by automation.
 - `README.md` — primary human entry point.
-- `QUICK-REFERENCE.md`, `TESTING.md`, `E1155-FIX.md` — supporting
-  documentation kept at the repo root.
+- `QUICK-REFERENCE.md`, `TESTING.md` — supporting documentation kept at the
+  repo root.
 - `docs/archive/` — historical completion/status notes (`FINAL-STATUS.md`,
   `FINAL-SUCCESS.md`, `MISSION-COMPLETE.md`, `REPO-SUMMARY.md`,
   `REPOSITORY-STATUS.md`, `IMPROVEMENTS.md`) preserved for context only.
@@ -57,8 +55,8 @@ To smoke-test the configuration without launching the UI:
 ./verify-repo.sh
 ```
 
-To switch profiles, copy the desired variant over `init.lua` (e.g.
-`cp init-minimal.lua init.lua`) and restart Neovim.
+To switch to the Complex profile, copy it over `init.lua` (e.g.
+`cp init-complex.lua init.lua`) and restart Neovim.
 
 ## How to deploy
 

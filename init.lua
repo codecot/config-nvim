@@ -1,61 +1,35 @@
--- ~/.config/nvim/init-safe.lua
--- Safe init that completely avoids the syntax.vim ALL events error
+-- ~/.config/nvim/init.lua
+-- Default profile: options, keymaps, autocmds and the enhanced plugin set.
+-- To use the LSP / experimental profile instead, copy init-complex.lua over
+-- this file and restart Neovim.
 
--- Method 1: Completely disable problematic syntax loading
-vim.g.loaded_syntax_completion = 1
-vim.g.loaded_syntax = 1
+-- Enable syntax early, before plugins register their FileType autocommands.
+-- Some Neovim builds error with `E1155: Cannot define autocommands for ALL
+-- events` when the stock syntax/syntax.vim runs `au! FileType *` against a
+-- large autocommand table (i.e. the default post-init `syntax on`). Running it
+-- now, while that table is still small, sources the file cleanly once and makes
+-- the later default a no-op. Highlighting itself is handled by treesitter.
+pcall(vim.cmd, "syntax enable")
 
--- Method 2: Override the problematic autocmd function temporarily
-local original_nvim_create_autocmd = vim.api.nvim_create_autocmd
-vim.api.nvim_create_autocmd = function(event, opts)
-  -- Block ALL event autocmds that cause E1155
-  if type(event) == "string" and (event:upper() == "ALL" or event == "*") then
-    return -1 -- Return dummy autocmd id
-  end
-  if type(event) == "table" then
-    local filtered_events = {}
-    for _, e in ipairs(event) do
-      if e:upper() ~= "ALL" and e ~= "*" then
-        table.insert(filtered_events, e)
-      end
-    end
-    if #filtered_events == 0 then
-      return -1
-    end
-    event = filtered_events
-  end
-  return original_nvim_create_autocmd(event, opts)
-end
+require("options")
+require("keymaps")
+require("autocmds")
 
--- Load our configuration with error handling
-pcall(require, "options")
-pcall(require, "keymaps")
-
--- Load plugins with error handling
-local plugins_ok, _ = pcall(require, "enhanced-plugins")
+-- Load the enhanced plugin set, falling back to the minimal set if it fails.
+local plugins_ok = pcall(require, "enhanced-plugins")
 if not plugins_ok then
-  -- Fallback to minimal plugins
   pcall(require, "minimal-plugins")
 end
 
--- Restore original function and enable syntax after everything loads
+-- Set colorscheme after plugins are loaded, with a graceful fallback.
 vim.schedule(function()
-  vim.api.nvim_create_autocmd = original_nvim_create_autocmd
-  
-  -- Load autocmds after syntax issues are resolved
-  pcall(require, "autocmds")
-  
-  -- Set colorscheme with fallback
-  local status_ok, _ = pcall(vim.cmd.colorscheme, "catppuccin")
+  local status_ok = pcall(vim.cmd.colorscheme, "catppuccin")
   if not status_ok then
-    pcall(vim.cmd.colorscheme, "default")
+    vim.notify("Colorscheme not found, using default", vim.log.levels.WARN)
   end
-  
-  -- Safely enable syntax
-  pcall(vim.cmd, "syntax enable")
 end)
 
--- Create useful commands
+-- Useful commands
 vim.api.nvim_create_user_command("ReloadConfig", function()
   for name, _ in pairs(package.loaded) do
     if name:match("^user") or name:match("^options") or name:match("^keymaps") then
