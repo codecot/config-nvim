@@ -6,28 +6,11 @@ if vim.fn.has('nvim-0.9') == 0 then
   return
 end
 
--- Additional safety: Only create autocmds if no syntax errors are detected
-local syntax_error_detected = false
-vim.api.nvim_create_autocmd("VimEnter", {
-  once = true,
-  callback = function()
-    -- Check if E1155 occurred during startup
-    local messages = vim.api.nvim_exec2("messages", { output = true })
-    if messages.output:match("E1155") then
-      syntax_error_detected = true
-      vim.notify("E1155 detected - using minimal autocmds", vim.log.levels.WARN)
-    end
-  end,
-})
-
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
 -- Wrap autocmd creation in pcall for error safety
 local function safe_autocmd(event, opts)
-  if syntax_error_detected then
-    return -- Skip if syntax errors detected
-  end
   local success, err = pcall(autocmd, event, opts)
   if not success then
     vim.notify("Autocmd creation failed: " .. tostring(err), vim.log.levels.WARN)

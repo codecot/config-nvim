@@ -25,14 +25,11 @@ nvim
 ```bash
 cd ~/.config/nvim
 
-# Use minimal stable config
-cp init-minimal.lua init.lua
-
-# Use enhanced config (current)
-cp init-enhanced.lua init.lua
-
-# Use complex config (for Neovim 0.10+)
+# Use the Complex / LSP config (for Neovim 0.10+)
 cp init-complex.lua init.lua
+
+# Revert to the Default config
+git checkout init.lua
 ```
 
 ## Common Issues & Solutions
@@ -57,8 +54,8 @@ rm -rf ~/.local/share/nvim/lazy/
 
 ### 4. Performance Issues
 
-- Switch back to minimal config if enhanced version is too heavy
-- The minimal config has all essential features
+- The Default config loads the enhanced plugin set, falling back to the
+  minimal plugin set (`lua/minimal-plugins.lua`) if it fails to load
 
 ## Key Features Summary
 
@@ -74,9 +71,9 @@ rm -rf ~/.local/share/nvim/lazy/
 - ✅ Better autocmds and options
 - ✅ Improved keymaps
 
-### Both Configurations Include:
+### Both Profiles Include:
 
-- ✅ Stable plugin versions for Neovim 0.9.5
+- ✅ Stable, pinned plugin versions
 - ✅ Error handling and fallbacks
 - ✅ Clean, organized structure
 - ✅ Well-commented code
@@ -88,12 +85,10 @@ rm -rf ~/.local/share/nvim/lazy/
 3. **Customize**: Modify colors, keybindings, or add languages as needed
 4. **Consider upgrading**: Neovim 0.10+ will enable LSP features
 
-## Backup Strategy
+## Profiles
 
-Your configurations are safely backed up:
+- `init.lua` - Default profile (enhanced plugin set, minimal fallback)
+- `init-complex.lua` - LSP-enabled profile (for Neovim 0.10+)
 
-- `init-minimal.lua` - Working minimal version
-- `init-enhanced.lua` - Feature-rich version
-- `init-complex.lua` - Original with LSP (for future use)
-
-You can always revert to any version by copying it to `init.lua`.
+Switch to Complex by copying it over `init.lua`; revert with
+`git checkout init.lua`.

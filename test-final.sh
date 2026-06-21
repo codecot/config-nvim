@@ -13,12 +13,12 @@ else
     echo "   ✗ Configuration failed to load"
 fi
 
-# Test 2: E1155 error check
-echo "2. Testing for E1155 error..."
-if timeout 10s nvim --headless -c "q!" 2>&1 | grep -q "E1155"; then
-    echo "   ✗ E1155 error still present"
+# Test 2: Clean startup check (no errors on a bare launch)
+echo "2. Testing for startup errors..."
+if timeout 10s nvim --headless -c "q!" 2>&1 | grep -qE "^E[0-9]+:"; then
+    echo "   ✗ Startup error detected"
 else
-    echo "   ✓ No E1155 error detected"
+    echo "   ✓ No startup errors detected"
 fi
 
 # Test 3: Plugin loading
@@ -48,10 +48,10 @@ fi
 echo
 echo "=== Test Summary ==="
 echo "Configuration appears to be working correctly!"
-echo "Key improvements made:"
-echo "- Fixed E1155 error with autocmd blocking"
-echo "- Updated which-key configuration to modern preset"
-echo "- Added comprehensive error handling throughout"
-echo "- Enhanced plugin configurations for better compatibility"
+echo "Checks covered:"
+echo "- Clean startup with no errors"
+echo "- Which-key configuration loads"
+echo "- Error handling and fallbacks throughout"
+echo "- Enhanced plugin set loads (with minimal fallback)"
 echo
 echo "To start Neovim with this configuration, simply run: nvim"
