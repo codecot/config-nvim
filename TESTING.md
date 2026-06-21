@@ -49,8 +49,24 @@ rm -rf ~/.local/share/nvim/lazy/
 
 ### 3. LSP Keybindings Don't Work
 
-- LSP keybindings are set up but LSP servers need to be installed
-- Current config works without LSP for basic editing
+- On first use, `mason` installs the servers in the background — wait for
+  `:Mason` to show `basedpyright`/`ruff` as installed, then reopen the file
+- `basedpyright` needs Node.js on `PATH`
+- Check `:checkhealth lsp` and `:LspInfo`
+
+### Python IDE smoke test
+
+```bash
+# Open a Python file and confirm the IDE attaches:
+nvim example.py
+# Inside Neovim:
+# :Mason          → basedpyright, ruff, debugpy installed
+# :checkhealth     → lsp / treesitter / dap sections OK
+# K / gd / gr      → hover / definition / references
+# <leader>cf       → format with ruff
+# <leader>db,<leader>dc → debug; <leader>tt → run nearest test
+# :VenvSelect      → pick a virtualenv (needs the `fd` CLI)
+```
 
 ### 4. Performance Issues
 

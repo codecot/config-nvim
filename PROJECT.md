@@ -3,26 +3,30 @@
 ## What this project does
 
 A Neovim editor configuration written in Lua, intended to be cloned into
-`~/.config/nvim`. It ships two profiles — the Default (`init.lua`) and the
-LSP-enabled Complex (`init-complex.lua`) — so the user can pick the one that
-matches their Neovim version and resource budget.
+`~/.config/nvim`. The Default profile (`init.lua`) is a modern, Python-first
+IDE built on Neovim's native LSP API; a legacy Complex profile
+(`init-complex.lua`) is kept for older setups.
 
 ## Main technologies
 
-- Neovim 0.9+ (target runtime; Complex profile needs 0.10+)
+- Neovim 0.11+ for the Default profile (native `vim.lsp` API)
 - Lua (configuration language)
 - [lazy.nvim](https://github.com/folke/lazy.nvim) for plugin management
+- LSP/tooling via `mason.nvim`: `basedpyright`, `ruff`, `lua_ls`, `debugpy`
+- `nvim-cmp` (completion), `conform.nvim` (format), `nvim-dap` (debug),
+  `neotest` (test), `nvim-treesitter` (highlight, master branch)
 - Bash for the local verification/test scripts
 
 ## Project structure
 
-- `init.lua` — main entry point loaded by Neovim; the Default profile.
-- `init-complex.lua` — alternate LSP-enabled profile, selectable by copying it
-  over `init.lua`.
+- `init.lua` — main entry point loaded by Neovim; the Default profile (IDE).
+- `init-complex.lua` — legacy LSP profile, selectable by copying it over
+  `init.lua`. Predates the IDE layer; unmaintained.
 - `lua/` — modular configuration: `options.lua`, `keymaps.lua`,
-  `autocmds.lua`, `plugins.lua`, `enhanced-plugins.lua`,
-  `minimal-plugins.lua`, `no-compiler-plugins.lua`, `lsp.lua`,
-  `cmp-config.lua`.
+  `autocmds.lua`, `enhanced-plugins.lua` (UI/editor base + IDE import),
+  `plugins/ide.lua` (LSP/completion/format/debug/test/venv), `cmp-config.lua`,
+  `minimal-plugins.lua` (fallback), and the legacy `plugins.lua` / `lsp.lua` /
+  `no-compiler-plugins.lua`.
 - `lazy-lock.json` — pinned plugin versions managed by lazy.nvim.
 - `test-config.sh`, `test-final.sh`, `verify-repo.sh` — Bash scripts that
   smoke-test the config and verify repository contents.
@@ -69,5 +73,10 @@ release pipeline.
 - GitHub — hosts this repo and every plugin pulled in by `lazy-lock.json`
   (Catppuccin, Telescope, nvim-tree, lualine, bufferline, alpha-nvim,
   nvim-treesitter, nvim-autopairs, nvim-surround, Comment.nvim,
-  indent-blankline, gitsigns, mini.icons, plenary, which-key, lazy.nvim).
+  indent-blankline, gitsigns, mini.icons, plenary, which-key, lazy.nvim, plus
+  the IDE layer: mason, nvim-lspconfig, nvim-cmp, conform, nvim-dap, neotest,
+  venv-selector).
+- `mason` downloads language servers/tools (`basedpyright`, `ruff`, `lua_ls`,
+  `debugpy`) on first use; `basedpyright` needs Node.js, `:VenvSelect` needs
+  the `fd` CLI.
 - No databases, APIs, or remote services are contacted at runtime.
