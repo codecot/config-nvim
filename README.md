@@ -1,12 +1,37 @@
 # Neovim Configuration
 
-A personal Neovim configuration written in Lua, organised as two startup
-profiles so the same repo can be used on machines with different Neovim
-versions and resource budgets.
+A personal Neovim configuration written in Lua. The Default profile is a
+modern, Python-first IDE built on Neovim's native LSP API; a legacy Complex
+profile is kept for older setups.
 
 - Plugin manager: [lazy.nvim](https://github.com/folke/lazy.nvim)
 - Theme: [Catppuccin](https://github.com/catppuccin/nvim)
-- Target runtime: **Neovim 0.9+** (the Complex profile needs 0.10+)
+- LSP / completion: native `vim.lsp` + `mason.nvim` + `nvim-cmp`
+- Target runtime: **Neovim 0.11+** for the Default profile (native LSP API)
+
+### Python IDE features (Default profile)
+
+| Area        | Tooling                                              |
+| ----------- | --------------------------------------------------- |
+| LSP         | `basedpyright` (types/IntelliSense) + `ruff` (lint) |
+| Completion  | `nvim-cmp` + LuaSnip                                 |
+| Formatting  | `conform.nvim` → `ruff` (format-on-save)            |
+| Debugging   | `nvim-dap` + `nvim-dap-python` (debugpy) + dap-ui   |
+| Testing     | `neotest` + `neotest-python` (pytest)               |
+| Virtualenv  | `venv-selector.nvim` (`:VenvSelect`)                |
+| Highlight   | `nvim-treesitter` (main branch) — `python` parser   |
+
+All language servers and tools are installed automatically by `mason` on
+first use — nothing system-wide is needed beyond:
+
+- **Python 3** and **Node.js** (Node is required by `basedpyright`)
+- **`fd`** on `PATH` — only for `:VenvSelect` (`apt install fd-find`, then the
+  binary may be `fdfind`)
+
+Key bindings are buffer-local and discoverable via which-key (`<leader>` is
+space). Highlights: `gd`/`gr`/`K` (LSP nav/hover), `<leader>ca` (code action),
+`<leader>rn` (rename), `<leader>cf` (format), `<leader>d*` (debug),
+`<leader>t*` (test), `<leader>vs` (select venv). See `QUICK-REFERENCE.md`.
 
 ## Installation
 
@@ -33,10 +58,10 @@ cd ~/.config/nvim
 cp init-complex.lua init.lua        # then restart Neovim
 ```
 
-| Profile  | File               | What it loads                                                                          | When to use                                                       |
-| -------- | ------------------ | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Default  | `init.lua`         | `options`, `keymaps`, `autocmds`, `enhanced-plugins` (falls back to `minimal-plugins`) | Day-to-day setup. This is the shipped `init.lua`.                 |
-| Complex  | `init-complex.lua` | `options`, `keymaps`, `plugins` (the LSP-enabled plugin set)                            | Full / experimental profile. Requires **Neovim 0.10+** for LSP.   |
+| Profile  | File               | What it loads                                                                                       | When to use                                                                 |
+| -------- | ------------------ | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Default  | `init.lua`         | `options`, `keymaps`, `autocmds`, `enhanced-plugins` + `plugins/ide` (LSP/DAP/test), minimal fallback | Day-to-day setup. The full Python IDE. Needs **Neovim 0.11+**.              |
+| Complex  | `init-complex.lua` | `options`, `keymaps`, `plugins` (the older pinned LSP set)                                           | Legacy profile, predates the IDE layer. Kept for older Neovim; unmaintained. |
 
 See `QUICK-REFERENCE.md` for the day-to-day keybindings.
 
@@ -72,12 +97,14 @@ fresh clone.
 │   ├── options.lua            # vim settings
 │   ├── keymaps.lua            # key bindings
 │   ├── autocmds.lua           # autocommands
-│   ├── plugins.lua            # plugin set used by init-complex.lua (with LSP)
-│   ├── enhanced-plugins.lua   # plugin set used by safe/minimal/enhanced
+│   ├── enhanced-plugins.lua   # Default profile: UI/editor base + IDE import
+│   ├── plugins/
+│   │   └── ide.lua            # LSP, completion, format, debug, test, venv
+│   ├── cmp-config.lua         # nvim-cmp setup
 │   ├── minimal-plugins.lua    # fallback plugin set used by init.lua
-│   ├── no-compiler-plugins.lua
-│   ├── lsp.lua
-│   └── cmp-config.lua
+│   ├── plugins.lua            # legacy plugin set used by init-complex.lua
+│   ├── lsp.lua               # legacy LSP setup (Complex profile)
+│   └── no-compiler-plugins.lua
 ├── test-config.sh             # smoke-test script
 ├── test-final.sh              # broader smoke-test script
 ├── verify-repo.sh             # repo hygiene check
