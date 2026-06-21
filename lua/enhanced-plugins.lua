@@ -323,37 +323,29 @@ require("lazy").setup({
     end
   },
 
-  -- Enhanced Treesitter with safer configuration
+  -- Treesitter (master branch: the stable configs API that reliably compiles
+  -- parsers via the system C compiler and enables highlighting).
   {
     "nvim-treesitter/nvim-treesitter",
-    build = function()
-      pcall(vim.cmd, "TSUpdate")
-    end,
+    branch = "master",
+    build = ":TSUpdate",
     config = function()
-      local status_ok, configs = pcall(require, "nvim-treesitter.configs")
-      if not status_ok then
+      local ok, configs = pcall(require, "nvim-treesitter.configs")
+      if not ok then
         return
       end
-      
       configs.setup({
-        ensure_installed = { "lua", "vim", "vimdoc", "markdown", "json" },
-        auto_install = false,
+        ensure_installed = {
+          "lua", "vim", "vimdoc", "markdown", "markdown_inline",
+          "json", "yaml", "toml", "bash", "python",
+        },
+        auto_install = true,
         sync_install = false,
-        
-        highlight = { 
+        highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,
         },
         indent = { enable = true },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = "<C-space>",
-            node_incremental = "<C-space>",
-            scope_incremental = false,
-            node_decremental = "<bs>",
-          },
-        },
       })
     end
   },
@@ -439,4 +431,7 @@ require("lazy").setup({
       alpha.setup(dashboard.config)
     end
   },
+
+  -- Modern IDE layer: LSP, completion, formatting, debugging, testing, venv.
+  { import = "plugins.ide" },
 })
