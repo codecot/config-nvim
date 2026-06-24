@@ -10,6 +10,20 @@
 --
 -- Language tooling is installed on demand by mason; nothing system-wide is
 -- required beyond Python 3, Node (for basedpyright) and optionally `fd`.
+--
+-- This whole layer targets the native LSP API (vim.lsp.config / vim.lsp.enable),
+-- added in Neovim 0.11. On older Neovim it is skipped entirely so the same repo
+-- still works on hosts with an older runtime (mason-lspconfig would otherwise
+-- crash calling vim.lsp.enable). Such hosts get the UI/editor base only.
+if vim.fn.has("nvim-0.11") == 0 then
+  vim.schedule(function()
+    vim.notify(
+      "IDE layer (LSP/DAP/test) needs Neovim 0.11+; skipped on " .. tostring(vim.version()),
+      vim.log.levels.WARN
+    )
+  end)
+  return {}
+end
 
 return {
   -- Package manager for LSP servers, formatters and debuggers ---------------
