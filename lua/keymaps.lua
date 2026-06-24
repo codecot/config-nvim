@@ -27,13 +27,11 @@ keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find buffers" 
 keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", { desc = "Find help" })
 keymap("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Recent files" })
 
--- LSP keymaps (for future LSP setup)
-keymap("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-keymap("n", "gr", vim.lsp.buf.references, { desc = "Show references" })
-keymap("n", "K", vim.lsp.buf.hover, { desc = "Show hover info" })
-keymap("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code actions" })
-keymap("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename symbol" })
-keymap("n", "<leader>lf", vim.lsp.buf.format, { desc = "Format code" })
+-- LSP keymaps are intentionally NOT set here: they are buffer-local and only
+-- meaningful when a language server attaches. The Default profile sets them on
+-- LspAttach (lua/plugins/ide.lua); the Complex profile sets them in its
+-- on_attach (lua/lsp.lua). Defining them globally would shadow defaults like
+-- `K` in buffers that have no LSP client.
 
 -- Window navigation
 keymap("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
