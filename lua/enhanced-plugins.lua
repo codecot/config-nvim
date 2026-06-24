@@ -434,4 +434,8 @@ require("lazy").setup({
 
   -- Modern IDE layer: LSP, completion, formatting, debugging, testing, venv.
   { import = "plugins.ide" },
+}, {
+  -- None of the plugins here need luarocks; disabling it keeps `:checkhealth`
+  -- clean (no hererocks/luarocks errors) and skips an unused install path.
+  rocks = { enabled = false },
 })

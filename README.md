@@ -24,9 +24,36 @@ profile is kept for older setups.
 All language servers and tools are installed automatically by `mason` on
 first use — nothing system-wide is needed beyond:
 
+- **Neovim 0.11+** — the IDE layer uses the native LSP API. On an older
+  runtime the layer is skipped automatically (see *Installing / upgrading
+  Neovim* below); the rest of the editor still loads.
 - **Python 3** and **Node.js** (Node is required by `basedpyright`)
-- **`fd`** on `PATH` — only for `:VenvSelect` (`apt install fd-find`, then the
-  binary may be `fdfind`)
+- **`fd`** on `PATH` — only for `:VenvSelect`. On Ubuntu the package is
+  `fd-find` and the binary is `fdfind`, so expose it under the expected name:
+
+  ```bash
+  sudo apt install fd-find
+  mkdir -p ~/.local/bin && ln -sf "$(command -v fdfind)" ~/.local/bin/fd
+  ```
+
+### Installing / upgrading Neovim
+
+The IDE layer needs **Neovim 0.11+**; distro packages are often older. Two easy
+ways to get a current build:
+
+```bash
+# Option A — snap (tracks latest stable)
+sudo snap install nvim --classic
+
+# Option B — official tarball (no snap / FUSE needed)
+curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
+```
+
+If an old `apt` Neovim is installed, remove it first (`sudo apt remove neovim`)
+and run `hash -r` so the shell finds the new binary. Verify with
+`nvim --version` (want `≥ 0.11`), then run `nvim "+Lazy! sync" +qa`.
 
 Key bindings are buffer-local and discoverable via which-key (`<leader>` is
 space). Highlights: `gd`/`gr`/`K` (LSP nav/hover), `<leader>ca` (code action),
