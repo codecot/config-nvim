@@ -48,8 +48,10 @@ return {
     dependencies = { "mason-org/mason.nvim" },
     event = "VeryLazy",
     config = function()
+      -- ruff is installed via mason-lspconfig (it doubles as the LSP server);
+      -- here we only need the debug adapter, which is not an LSP server.
       require("mason-tool-installer").setup({
-        ensure_installed = { "ruff", "debugpy" },
+        ensure_installed = { "debugpy" },
         auto_update = false,
         run_on_start = true,
       })
@@ -100,8 +102,9 @@ return {
         },
       })
 
-      -- ruff: linting, import sorting, formatting (hover handled by basedpyright).
-      vim.lsp.config("ruff", {})
+      -- ruff (linting / import sort / format) needs no extra config; it is
+      -- enabled below and its hover is disabled on attach in favour of
+      -- basedpyright.
 
       -- lua_ls: aware of the Neovim runtime when editing this config.
       vim.lsp.config("lua_ls", {
@@ -206,13 +209,9 @@ return {
 
       -- :FormatToggle [!]  — toggle autoformat globally (or for the buffer with !)
       vim.api.nvim_create_user_command("FormatToggle", function(args)
-        if args.bang then
-          vim.b.disable_autoformat = not vim.b.disable_autoformat
-        else
-          vim.g.disable_autoformat = not vim.g.disable_autoformat
-        end
-        local off = args.bang and vim.b.disable_autoformat or vim.g.disable_autoformat
-        vim.notify("Autoformat " .. (off and "disabled" or "enabled"))
+        local scope = args.bang and vim.b or vim.g -- bang = this buffer only
+        scope.disable_autoformat = not scope.disable_autoformat
+        vim.notify("Autoformat " .. (scope.disable_autoformat and "disabled" or "enabled"))
       end, { bang = true, desc = "Toggle format-on-save" })
     end,
   },
